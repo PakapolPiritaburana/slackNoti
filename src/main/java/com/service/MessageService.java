@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dao.MessageDao;
-import com.domain.SlackResponse;
+import com.domain.Request;
 
 @Service
 public class MessageService {
@@ -13,8 +13,9 @@ public class MessageService {
 	private MessageDao messageDao;
 	
 	@ResponseBody
-	public SlackResponse addSlackNoti(SlackResponse slackRequest) {
+	public Request addSlackNoti(Request slackRequest) {
 		String response = messageDao.send(slackRequest);
-        return new SlackResponse(response);
+		slackRequest.setText(response);
+        return slackRequest;
     }
 }

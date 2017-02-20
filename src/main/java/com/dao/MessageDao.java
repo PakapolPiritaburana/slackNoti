@@ -1,28 +1,29 @@
 package com.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.domain.SlackResponse;
+import com.domain.Request;
 
 @Service
 public class MessageDao {
-	@Autowired
-    private RestTemplate restTemplate;
-	
-	public String send(SlackResponse request){
-		HttpHeaders httpHeader = new HttpHeaders();
-        HttpEntity<SlackResponse> httpEntity = new HttpEntity<>(request);
 
+	public String send(Request request) {
 		try {
-			restTemplate.exchange("https://hooks.slack.com/services/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", HttpMethod.POST, httpEntity, String.class);
+			RestTemplate restTemplate = new RestTemplate();
+			String response = restTemplate.postForObject(
+					"https://hooks.slack.com/services/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", request,
+					String.class);
+
+			return response;
 		} catch (Exception e) {
-			
+			throw new RuntimeException(e);
 		}
-		return "";
+	}
+
+	@Bean
+	public RestTemplate restTemplate() {
+		return new RestTemplate();
 	}
 }
