@@ -15,9 +15,11 @@ public class MessageDao {
 			String response = restTemplate.postForObject(
 					"https://hooks.slack.com/services/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", request,
 					String.class);
-
+		
 			return response;
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		    System.out.println(e.getCause().getMessage());
 			throw new RuntimeException(e);
 		}
 	}
